@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Ceejay Nwachukwu — Full-Stack Engineer</title>
+  <meta name="description" content="Ceejay Nwachukwu — Full-Stack Engineer. Building scalable web apps with Next.js, Node, TypeScript. Available for hire." />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://ceejaynwachukwu.dev/" />
+  <meta property="og:title" content="Ceejay Nwachukwu — Full-Stack Engineer" />
+  <meta property="og:description" content="Building scalable web apps — Next.js | Node | TypeScript" />
+  <meta property="og:type" content="website" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#FFFFFF" />
+  <style>
+    :root{
+      --bg:#FFFFFF;
+      --card:#FAF9F7;
+      --text:#5C4B3D;
+      --accent:#D4B069;
+      --deep:#3F2F25;
+      --deep-10: rgba(63,47,37,.06);
+      --border: 1px solid rgba(63,47,37,.06);
+      --radius: 12px;
+      --glass-blur: 12px;
+      --max-width: 1200px;
+      --font-heading: "Playfair Display", serif;
+      --font-mono: "JetBrains Mono", monospace;
+      --ease: cubic-bezier(.16,.84,.34,1);
+      --container-gap: 28px;
+      --trans: .28s var(--ease);
+      --cursor-size: 22px;
+    }
+    /* Dark mode palette (toggle adds .dark on html) */
+    html.dark{
+      --bg:#0F0A05;
+      --card:#12100E;
+      --text:#EDE6DE;
+      --deep:#1A130F;
+      --deep-10: rgba(255,255,255,.03);
+      --border: 1px solid rgba(255,255,255,.03);
+    }
+
+    /* Global resets — mobile-first */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: var(--font-mono);
+      color:var(--text);
+      background:var(--bg);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+      -webkit-tap-highlight-color: transparent;
+    }
+    img{max-width:100%;height:auto;display:block}
+    a{color:inherit;text-decoration:none}
+    .container{width:calc(100% - 32px);max-width:var(--max-width);margin:0 auto;padding:0 16px}
+    /* Layout helpers */
+    .row{display:flex;gap:var(--container-gap);flex-wrap:wrap}
+    .col{flex:1;min-width:0}
+    .muted{opacity:.7;font-size:.95rem}
+
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      border:var(--border);
+      box-shadow:0 6px 18px rgba(31,24,20,.04);
+      padding:18px;
+    }
+
+    #preloader{
+      position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:9999;
+      transition:opacity .45s ease;
+    }
+    #preloader.hidden{opacity:0;pointer-events:none;visibility:hidden}
+    .logo-mark{
+      font-family:var(--font-heading);
+      color:var(--deep);
+      letter-spacing:.4px;
+      font-size:20px;
+      display:inline-flex;align-items:center;gap:10px;
+    }
+    .loader-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:loader 1s infinite ease-in-out}
+    .loader-dot:nth-child(2){animation-delay:.15s}
+    .loader-dot:nth-child(3){animation-delay:.3s}
+    @keyframes loader{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+
+    /* -------------------------
+       Custom cursor (desktop only)
+       ------------------------- */
+    @media (hover: hover) and (pointer: fine){
+      .cursor-ring{
+        position:fixed;pointer-events:none;z-index:9998;
+        width:var(--cursor-size);height:var(--cursor-size);border-radius:50%;
+        border:1px solid rgba(92,75,61,.12);transform:translate(-50%,-50%);mix-blend-mode:normal;backdrop-filter: blur(0px);
+        transition:transform .14s linear, width .14s linear, height .14s linear, border-color .14s linear;
+      }
+      .cursor-ring.active{width:36px;height:36px;border-color:var(--accent);transform:translate(-50%,-50%) scale(1.05)}
+    }
+
+    header.site-header{
+      position:sticky;top:18px;z-index:999;display:flex;align-items:center;justify-content:space-between;
+      gap:16px;
+      max-width:var(--max-width);margin:0 auto;padding:0 16px;
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand .logo-mark{font-size:18px}
+    nav.primary{display:flex;gap:18px;align-items:center}
+    nav.primary a{font-weight:600;color:var(--deep);padding:8px 12px;border-radius:9px;transition:all var(--trans)}
+    nav.primary a:hover, nav.primary a:focus{background:linear-gradient(180deg, rgba(212,176,105,.08), transparent);color:var(--accent)}
+    .cta-btn{
+      background:transparent;border:1px solid var(--deep);padding:8px 14px;border-radius:10px;font-weight:600;cursor:pointer;
+      transition:all var(--trans);
+    }
+    .cta-btn:hover{transform:translateY(-4px);background:linear-gradient(180deg, rgba(212,176,105,.06), transparent);border-color:var(--accent);color:var(--accent)}
+
+    .hamburger{display:flex;align-items:center;gap:8px}
+    .hamburger button{background:transparent;border:0;padding:8px;border-radius:10px}
+    .hamburger .bar{width:20px;height:2px;background:var(--deep);border-radius:2px;display:block;transition:transform .2s}
+    /* Full screen overlay nav */
+    .mobile-overlay{position:fixed;inset:0;background:linear-gradient(180deg, rgba(63,47,37,.02), rgba(63,47,37,.03));backdrop-filter:blur(6px);z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;padding:48px}
+    .mobile-overlay.show{display:flex}
+    .mobile-overlay nav a{display:block;font-family:var(--font-heading);font-size:28px;color:var(--text);margin:12px 0;opacity:0;transform:translateY(10px);animation:stagger .36s forwards}
+    @keyframes stagger{to{opacity:1;transform:none}}
+
+    .bottom-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;display:flex;gap:10px;background:var(--card);border-radius:40px;padding:8px 12px;border:var(--border);z-index:999}
+    .bottom-bar a{display:inline-flex;padding:10px;border-radius:10px;align-items:center;justify-content:center;min-width:44px}
+
+    .hero{
+      min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;padding:48px 16px;
+      overflow:hidden;
+    }
+    .hero .glass{
+      width:100%;max-width:1200px;border-radius:20px;padding:42px;backdrop-filter:blur(var(--glass-blur));border:var(--border);background:linear-gradient(180deg, rgba(255,255,255,.6), rgba(250,249,247,.55));
+      display:flex;gap:28px;align-items:center;
+    }
+    .hero-left{flex:1;min-width:240px}
+    .hero-right{width:220px;display:flex;align-items:center;justify-content:center}
+    .hero h1{font-family:var(--font-heading);font-size:44px;color:var(--deep);margin:0 0 6px;letter-spacing:-0.6px}
+    .tagline{font-family:var(--font-mono);font-size:16px;color:var(--text);display:flex;gap:10px;align-items:center}
+    .rotating{font-weight:600;color:var(--deep);position:relative;min-width:220px}
+    .badge-available{display:inline-block;background:var(--accent);color:var(--deep);padding:7px 12px;border-radius:999px;font-weight:700;margin-left:12px}
+    .hero-sub{margin-top:16px;color:var(--text);max-width:66ch}
+    .down-cta{display:inline-flex;align-items:center;gap:8px;margin-top:20px;cursor:pointer}
+    .down-cta svg{transform:translateY(0);transition:transform .28s var(--ease)}
+    .down-cta:hover svg{transform:translateY(6px)}
+    .particles{position:absolute;inset:0;pointer-events:none;opacity:.9}
+
+    section{padding:64px 16px}
+    section .section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+    section h2{font-family:var(--font-heading);font-size:22px;margin:0;color:var(--deep)}
+    section p.lead{margin:0;color:var(--text);opacity:.9}
+
+    .about{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+    .portrait{width:160px;height:160px;border-radius:999px;overflow:hidden;border:var(--border);flex-shrink:0}
+    .portrait img{width:100%;height:100%;object-fit:cover;display:block}
+    .tech-grid{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+    .tech-chip{display:inline-flex;gap:8px;align-items:center;padding:8px 10px;border-radius:10px;background:transparent;border:1px solid rgba(63,47,37,.04);font-family:var(--font-mono);font-size:13px;color:var(--deep)}
+    .tech-chip .dot{width:8px;height:8px;border-radius:2px;background:var(--deep);opacity:.9}
+
+    /* Experience timeline */
+    .timeline{position:relative;padding-left:18px}
+    .timeline:before{content:"";position:absolute;left:9px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--deep), transparent)}
+    .timeline-item{position:relative;margin-bottom:20px;padding-left:18px}
+    .timeline-item .marker{position:absolute;left:-4px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--card);border:2px solid var(--deep)}
+    .timeline-item .card{cursor:pointer;transition:all var(--trans)}
+    .timeline-item .details{max-height:0;overflow:hidden;transition:max-height .36s ease;padding-top:0}
+    .timeline-item.expanded .details{max-height:260px;padding-top:12px}
+
+    /* Projects */
+    .filters{display:flex;gap:10px;flex-wrap:wrap}
+    .filter-btn{background:transparent;border:1px solid rgba(63,47,37,.04);padding:8px 12px;border-radius:999px;font-weight:700;cursor:pointer}
+    .filter-btn.active{background:var(--accent);color:var(--deep);box-shadow:0 8px 20px rgba(212,176,105,.08)}
+    .projects-grid{display:grid;grid-template-columns:repeat(1,1fr);gap:18px}
+    .project-card{border-radius:14px;padding:0;overflow:hidden;position:relative;cursor:pointer;transition:transform .28s var(--ease), box-shadow .28s var(--ease)}
+    .project-card .screenshot{height:220px;background:#eee;display:block}
+    .project-card .meta{padding:14px;background:var(--card);border-top:var(--border)}
+    .project-card:hover{transform:translateY(-8px);box-shadow:0 20px 40px rgba(31,24,20,.06)}
+    .project-overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(63,47,37,.22), rgba(63,47,37,.06));display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .24s}
+    .project-card:hover .project-overlay{opacity:1}
+    .tech-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .tag{background:var(--accent);color:var(--deep);padding:6px 8px;border-radius:8px;font-weight:700;font-family:var(--font-mono);font-size:12px}
+
+    /* Filters to columns on larger screens */
+    @media(min-width:780px){
+      .projects-grid{grid-template-columns:repeat(2,1fr)}
+      .hero h1{font-size:56px}
+    }
+    @media(min-width:1100px){
+      .projects-grid{grid-template-columns:repeat(3,1fr)}
+      .hero .glass{padding:56px}
+      .hero-right{width:300px}
+      .hero h1{font-size:72px}
+    }
+
+    /* Project modal (case study) */
+    .modal{
+      position:fixed;inset:0;background:linear-gradient(180deg, rgba(12,9,7,.6), rgba(12,9,7,.2));backdrop-filter:blur(8px);display:none;align-items:flex-start;justify-content:center;padding:40px;z-index:9999;overflow:auto
+    }
+    .modal.show{display:flex}
+    .modal .sheet{max-width:1000px;width:100%;background:var(--card);border-radius:16px;padding:28px;border:var(--border)}
+    .modal .hero-shot{height:360px;background:#ddd;border-radius:12px;overflow:hidden}
+
+    /* Skills pills */
+    .skills-grid{display:flex;gap:12px;flex-wrap:wrap}
+    .skill-pill{padding:12px 14px;border-radius:12px;background:transparent;border:1px solid rgba(63,47,37,.04);display:inline-flex;align-items:center;gap:10px}
+    .proficiency{display:inline-flex;gap:4px}
+    .dot{width:8px;height:8px;border-radius:2px;background:rgba(63,47,37,.15)}
+    .dot.on{background:var(--accent)}
+
+    /* Testimonials */
+    .testimonial{padding:20px;border-radius:12px;background:var(--card);border:var(--border)}
+
+    /* Contact */
+    .contact-grid{display:grid;grid-template-columns:1fr;gap:18px}
+    @media(min-width:880px){.contact-grid{grid-template-columns:1fr 360px}}
+    .contact-form input,.contact-form textarea{width:100%;padding:12px;border-radius:10px;border:var(--border);background:transparent;color:var(--text);resize:vertical}
+    .form-cta{display:flex;gap:12px;align-items:center}
+    .copy-mail{background:transparent;border:1px solid rgba(63,47,37,.06);padding:10px 12px;border-radius:10px;cursor:pointer}
+
+    /* Footer */
+    footer{padding:30px 16px;border-top:var(--border);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+
+    /* 404 page (simple) */
+    .notfound{min-height:70vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px}
+    .muted-small{opacity:.7;font-size:14px}
+
+    /* Utility */
+    .visually-hidden{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+    button{font-family:var(--font-mono);cursor:pointer}
+    .sr-only{position:absolute;clip:rect(0 0 0 0);clip-path:inset(50%);height:1px;width:1px;overflow:hidden;border:0;padding:0;margin:-1px}
+  </style>
+</head>
+<body>
+
+  <!-- Preloader -->
+  <div id="preloader" role="status" aria-live="polite">
+    <div style="text-align:center">
+      <div class="logo-mark" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="display:block">
+          <rect width="24" height="24" rx="6" fill="#D4B069"></rect>
+          <path d="M6 16L18 8" stroke="#3F2F25" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span style="font-weight:700">CN</span>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
+        <span class="loader-dot"></span><span class="loader-dot"></span><span class="loader-dot"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom cursor -->
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="site-header" role="banner" aria-label="Main header">
+    <div class="brand">
+      <a href="#home" class="logo-mark" aria-label="Ceejay Nwachukwu home">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect width="24" height="24" rx="6" fill="#D4B069"></rect>
+          <path d="M6 16L18 8" stroke="#3F2F25" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span style="font-size:14px;letter-spacing:.6px">Ceejay Nwachukwu</span>
+      </a>
+      <span class="muted" style="font-size:13px">Full-Stack Engineer</span>
+    </div>
+
+    <nav class="primary" role="navigation" aria-label="Primary navigation">
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#about">About</a>
+      <a href="#contact" class="cta-btn">Contact</a>
+      <button id="darkToggle" aria-pressed="false" title="Toggle dark mode" style="margin-left:8px">
+        <!-- simple moon/sun icon -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="#3F2F25" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="hamburger" style="display:none">
+        <button id="hambtn" aria-label="Open menu" aria-expanded="false">
+          <span class="bar"></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Mobile overlay nav -->
+  <div class="mobile-overlay" id="mobileOverlay" aria-hidden="true" role="dialog" aria-label="Mobile menu">
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#projects" style="animation-delay:.06s">Projects</a>
+      <a href="#experience" style="animation-delay:.12s">Experience</a>
+      <a href="#about" style="animation-delay:.18s">About</a>
+      <a href="#contact" style="animation-delay:.24s">Contact</a>
+    </nav>
+    <div style="margin-top:28px;display:flex;gap:12px">
+      <a href="#" class="cta-btn">Download CV</a>
+      <button id="mobDark" class="cta-btn">Dark</button>
+    </div>
+  </div>
+
+  <!-- Bottom sticky bar (mobile) -->
+  <div class="bottom-bar" role="navigation" aria-label="Quick navigation" style="display:none">
+    <a href="#home" title="Home" aria-label="Home">
+      <!-- home icon -->
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V9.5z" stroke="#3F2F25" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a href="#projects" title="Projects" aria-label="Projects">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="1" stroke="#3F2F25" stroke-width="1.4"/><rect x="13" y="13" width="8" height="8" rx="1" stroke="#3F2F25" stroke-width="1.4"/></svg>
+    </a>
+    <a href="#about" title="About" aria-label="About">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3" stroke="#3F2F25" stroke-width="1.4"/><path d="M6 20v-1a4 4 0 014-4h4a4 4 0 014 4v1" stroke="#3F2F25" stroke-width="1.4"/></svg>
+    </a>
+    <a href="#contact" title="Contact" aria-label="Contact">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 8V7a2 2 0 00-2-2H5a2 2 0 00-2 2v1" stroke="#3F2F25" stroke-width="1.4"/><rect x="3" y="8" width="18" height="12" rx="2" stroke="#3F2F25" stroke-width="1.4"/></svg>
+    </a>
+  </div>
+
+  <!-- MAIN -->
+  <main id="home" role="main">
+
+    <!-- HERO -->
+    <section class="hero" aria-label="Intro">
+      <div class="particles" aria-hidden="true">
+        <!-- subtle decorative SVG grid / mesh -->
+        <svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 800 600" style="position:absolute;opacity:.07;transform:translateY(-8%);">
+          <defs>
+            <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#D4B069"/><stop offset="1" stop-color="#FAF9F7"/></linearGradient>
+          </defs>
+          <g fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round">
+            <path d="M0 100 Q200 50 400 100 T800 100" stroke="#D4B069"/>
+            <path d="M0 300 Q200 260 400 300 T800 300" stroke="#5C4B3D"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="glass" role="region" aria-label="Introduction panel">
+        <div class="hero-left">
+          <h1>Ceejay <span style="display:inline-block">Nwachukwu</span></h1>
+          <div class="tagline">
+            <div class="rotating" id="rotatingTag">Full-Stack Engineer</div>
+            <span class="badge-available" role="status" aria-live="polite">Available for hire</span>
+          </div>
+          <p class="hero-sub muted" style="margin-top:12px">
+            I design and build resilient, maintainable web platforms for startups and product teams — 
+            from production-ready Next.js frontends to robust Node.js services.
+          </p>
+
+          <div style="margin-top:18px;display:flex;gap:12px;align-items:center">
+            <a class="cta-btn" href="#projects" aria-label="View projects">View Work</a>
+            <a class="cta-btn" href="images/CV.jpeg" download aria-label="Download CV">Download CV</a>
+            <button id="scrollDown" class="down-cta" aria-label="Scroll to about">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></svg>
+              <span class="muted">Scroll</span>
+            </button>
+          </div>
+
+          <div style="margin-top:20px" class="tech-grid" aria-hidden="false">
+            <span class="tech-chip" title="Next.js"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M4 6h16v12H4z" fill="#fff" stroke="#3F2F25" stroke-width="1.2"/></svg> Next.js</span>
+            <span class="tech-chip" title="TypeScript">TypeScript</span>
+            <span class="tech-chip" title="Node.js">Node</span>
+            <span class="tech-chip" title="Postgres">SQL</span>
+            <span class="tech-chip" title="TailwindCss">TailwindCss</span>
+          </div>
+        </div>
+
+        <div class="hero-right" aria-hidden="true">
+          <!-- portrait or mockup -->
+          <div style="width:160px;height:300px;border-radius:16px;overflow:hidden;border:var(--border);box-shadow: 0 14px 30px rgba(31,24,20,.04);">
+            <img src="images/Devfest.jpeg" alt="" style="width:100%;height:100%;object-fit:cover" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" aria-label="About me">
+      <div class="container">
+        <div class="section-head">
+          <h2>About</h2>
+        </div>
+        <div class="about">
+          <div class="col">
+            <p style="font-size:16px;margin-top:6px">
+              I’m Ceejay — a Full-Stack Engineer who crafts delightful, high-performance web apps. I focus on end-to-end product delivery: fast frontends, resilient APIs, and pragmatic systems for scale.
+            </p>
+            <p class="muted" style="margin-top:8px">Available for contract & senior roles. Based in Lagos / remote-ready.</p>
+
+            <div style="margin-top:14px">
+              <a href="images/CV.jpeg" class="cta-btn">Download CV</a>
+            </div>
+
+            <div class="tech-grid" style="margin-top:18px" aria-label="Tech stack">
+              <!-- use accessible images or SVGs in production -->
+              <span class="tech-chip" title="React">React</span>
+              <span class="tech-chip" title="Next.js">Next.js</span>
+              <span class="tech-chip" title="Node.js">Node.js</span>
+              <span class="tech-chip" title="TypeScript">TypeScript</span>
+              <span class="tech-chip" title="Postgres">Postgres</span>
+              <span class="tech-chip" title="Tailwind">Tailwind</span>
+              <span class="tech-chip" title="Docker">Docker</span>
+              <span class="tech-chip" title="TailwindCss">TailwindCss</span>
+            </div>
+          </div>
+
+          <div style="width:180px;text-align:center" aria-hidden="false">
+            <div class="portrait card" style="width:160px;height:160px;margin:0 auto">
+              <img src="images/Devfest.jpeg" alt="Portrait of Ceejay Nwachukwu" loading="lazy">
+            </div>
+            <div class="muted" style="margin-top:12px">Senior Full-Stack Engineer</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience" aria-label="Experience">
+      <div class="container">
+        <div class="section-head">
+          <h2>Experience</h2>
+          <p class="lead muted">Recent roles where I shipped product impact and measurable outcomes.</p>
+        </div>
+
+        <div class="timeline" role="list">
+          <div class="timeline-item" role="listitem">
+            <div class="marker" aria-hidden="true"></div>
+            <div class="card" tabindex="0" aria-expanded="false" aria-controls="exp1" onclick="toggleExp(this)" onkeydown="if(event.key==='Enter') toggleExp(this)">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div>
+                  <strong>Senior Full-Stack Developer</strong><div class="muted" style="font-size:13px">Yelocodesystems • 2024 — Present</div>
+                </div>
+                <div class="muted">Remote · Full time</div>
+              </div>
+              <div id="exp1" class="details">
+                <p class="muted" style="margin-top:8px">Led migrations to Next.js + tRPC, redesigned the analytics pipeline and improved page load by 48%. Mentored 3 engineers.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item" role="listitem">
+            <div class="marker" aria-hidden="true"></div>
+            <div class="card" tabindex="0" aria-expanded="false" aria-controls="exp2" onclick="toggleExp(this)" onkeydown="if(event.key==='Enter') toggleExp(this)">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div>
+                  <strong>Full-Stack Engineer</strong><div class="muted" style="font-size:13px">Private Startup • 2022 — 2024</div>
+                </div>
+                <div class="muted">Lagos · Remote</div>
+              </div>
+              <div id="exp2" class="details">
+                <p class="muted" style="margin-top:8px">Built checkout microservice, implemented observability (OpenTelemetry), and increased conversions by 12%.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" aria-label="Projects">
+      <div class="container">
+        <div class="section-head">
+          <h2>Selected Projects</h2>
+          <p class="lead muted">Production case studies focused on business metrics and technical craft.</p>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:14px">
+          <div class="filters" role="tablist" aria-label="Project filters">
+            <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">All</button>
+            <button class="filter-btn" data-filter="frontend" role="tab">Frontend</button>
+            <button class="filter-btn" data-filter="backend" role="tab">Backend</button>
+            <button class="filter-btn" data-filter="fullstack" role="tab">Full-Stack</button>
+            <button class="filter-btn" data-filter="mobile" role="tab">Mobile</button>
+          </div>
+          <div class="muted">Click a project to view the case study</div>
+        </div>
+
+        <div class="projects-grid" id="projectsGrid" aria-live="polite">
+          <!-- Project 1 -->
+          <article class="project-card card" data-type="fullstack" tabindex="0" role="button" aria-label="Open case study for Project Atlas" onclick="openProject('atlas')" onkeydown="if(event.key==='Enter') openProject('atlas')">
+            <div class="screenshot">
+              <img src="images/atlas.png" alt="Project Atlas screenshot" loading="lazy" style="width:100%;height:100%;object-fit:cover">
+            </div>
+            <div class="meta">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <strong>Atlas Dashboard</strong><span class="muted-small">2024</span>
+              </div>
+              <p class="muted" style="margin-top:6px">Analytics platform for merchants with real-time dashboards and anomaly alerts.</p>
+              <div class="tech-tags">
+                <span class="tag">TypeScript</span><span class="tag">JavaScript</span><span class="tag">Chart.js</span>
+              </div>
+            </div>
+            <div class="project-overlay" aria-hidden="true">
+              <button class="cta-btn" onclick="event.stopPropagation();openProject('atlas')">View Case Study</button>
+            </div>
+          </article>
+
+          <!-- Project 2 -->
+          <article class="project-card card" data-type="frontend" tabindex="0" role="button" aria-label="Open case study for UIKit Pro" onclick="openProject('uikit')" onkeydown="if(event.key==='Enter') openProject('uikit')">
+            <div class="screenshot">
+              <img src="assets/project-uikit.jpg" alt="UI Kit Pro screenshot" loading="lazy" style="width:100%;height:100%;object-fit:cover">
+            </div>
+            <div class="meta">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <strong>UIKit Pro</strong><span class="muted-small">2023</span>
+              </div>
+              <p class="muted" style="margin-top:6px">Design system & component library used by 10+ teams.</p>
+              <div class="tech-tags">
+                <span class="tag">React</span><span class="tag">TypeScript</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 3 -->
+          <article class="project-card card" data-type="backend" tabindex="0" role="button" aria-label="Open case study for Checkout API" onclick="openProject('checkout')">
+            <div class="screenshot">
+              <img src="assets/project-checkout.jpg" alt="Checkout API screenshot" loading="lazy" style="width:100%;height:100%;object-fit:cover">
+            </div>
+            <div class="meta">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <strong>Checkout API</strong><span class="muted-small">2022</span>
+              </div>
+              <p class="muted" style="margin-top:6px">High-throughput payments microservice with idempotent flows.</p>
+              <div class="tech-tags">
+                <span class="tag">Node</span><span class="tag">JS</span><span class="tag">SQL</span>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Project Modal / Case Study (example content injected dynamically) -->
+    <div id="projectModal" class="modal" role="dialog" aria-hidden="true" aria-label="Project case study">
+      <div class="sheet">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px">
+          <div>
+            <h3 id="projTitle" style="margin:0;font-family:var(--font-heading);font-size:20px;color:var(--deep)">Atlas Dashboard</h3>
+            <div class="muted-small">2025 · Lead engineer · TypeScript • JavaScript • Chart.js</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <a href="http://localhost:3000" id="projLive" class="cta-btn" target="_blank" rel="noopener">Live demo</a>
+            <a href="https://github.com/Ceejaybill/atlas-dashboard" id="projGit" class="cta-btn" target="_blank" rel="noopener">GitHub</a>
+            <button onclick="closeProject()" class="cta-btn" aria-label="Close case study">Close</button>
+          </div>
+        </div>
+
+        <div class="hero-shot" id="projShot" aria-hidden="true">
+          <img src="images/atlas.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy">
+        </div>
+
+        <div style="margin-top:14px;display:grid;grid-template-columns:1fr;gap:16px">
+          <div>
+            <h4 style="margin:0;font-family:var(--font-heading)">Problem</h4>
+            <p class="muted" style="margin-top:8px">Slow analytics and high latency on critical endpoints causing poor UX and cost overruns.</p>
+
+            <h4 style="margin-top:12px;font-family:var(--font-heading)">Solution</h4>
+            <p class="muted" style="margin-top:8px">Re-architected service boundaries, implemented streaming ingestion, and built optimized Next.js dashboards with server components.</p>
+
+            <h4 style="margin-top:12px;font-family:var(--font-heading)">Results</h4>
+            <ul class="muted" style="margin-top:8px">
+              <li>Page load improved by 48%</li>
+              <li>Costs reduced by 22% through better caching and batching</li>
+              <li>System now supports >10k concurrent users</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skills -->
+    <section id="skills" aria-label="Skills">
+      <div class="container">
+        <div class="section-head">
+          <h2>Skills</h2>
+          <p class="lead muted">Tools & languages I use to ship production systems.</p>
+        </div>
+
+        <div style="display:flex;gap:18px;flex-wrap:wrap">
+          <div class="card" style="flex:1;min-width:260px">
+            <h4 style="margin:0 0 8px;font-family:var(--font-heading)">Languages</h4>
+            <div class="skills-grid">
+              <div class="skill-pill">JavaScript <span class="proficiency" aria-hidden="true"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span></span></div>
+              <div class="skill-pill">TypeScript <span class="proficiency"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span></span></div>
+              <div class="skill-pill">SQL <span class="proficiency"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span></span></div>
+            </div>
+          </div>
+
+          <div class="card" style="flex:1;min-width:260px">
+            <h4 style="margin:0 0 8px;font-family:var(--font-heading)">Frameworks & Tools</h4>
+            <div class="skills-grid">
+              <div class="skill-pill">Next.js</div>
+              <div class="skill-pill">React</div>
+              <div class="skill-pill">Node.js</div>
+              <div class="skill-pill">Docker</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" aria-label="Testimonials">
+      <div class="container">
+        <div class="section-head">
+          <h2>Testimonials</h2>
+          <p class="lead muted">What clients say after working together.</p>
+        </div>
+
+        <div style="display:flex;gap:12px;overflow:hidden">
+          <div class="testimonial card" style="min-width:320px">
+            <p style="margin:0;font-style:italic">"Ceejay shipped our core product update on time and improved performance substantially — a rare blend of speed and quality."</p>
+            <div style="display:flex;align-items:center;gap:10px;margin-top:12px">
+              <img src="assets/client-1.jpg" alt="" style="width:36px;height:36px;border-radius:50%;object-fit:cover">
+              <div><strong>Janeth Faith</strong><div class="muted-small">CTO, Acme</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" aria-label="Contact">
+      <div class="container">
+        <div class="section-head">
+          <h2>Let’s build something amazing together</h2>
+          <p class="lead muted">Available for senior roles, contract engagements, and advisory.</p>
+        </div>
+
+        <div class="contact-grid">
+          <form class="contact-form card" onsubmit="handleContact(event)" aria-label="Contact form">
+            <label class="sr-only" for="name">Name</label>
+            <input id="name" name="name" placeholder="Your name" required aria-required="true">
+            <label class="sr-only" for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="Your email" required aria-required="true">
+            <label class="sr-only" for="message">Message</label>
+            <textarea id="message" name="message" rows="6" placeholder="Tell me about your project" required aria-required="true"></textarea>
+            <div class="form-cta" style="margin-top:8px">
+              <button type="submit" class="cta-btn">Send message</button>
+              <button type="button" class="copy-mail" id="copyMail" aria-label="Copy email">ceejayairdrop@gmail.com</button>
+            </div>
+          </form>
+
+          <aside class="card" aria-label="Contact details">
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div>
+                <strong>Email</strong>
+                <div class="muted-small">ceejayairdrop@gmail.com</div>
+              </div>
+              <div>
+                <strong>Location</strong>
+                <div class="muted-small">Port Harcourt · Remote</div>
+              </div>
+              <div style="display:flex;gap:12px;margin-top:8px">
+                <a href="404.html" title="LinkedIn" aria-label="LinkedIn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 10-4 0v7h-4v-14h4v2" stroke="#3F2F25" stroke-width="1.4"/></svg>
+                </a>
+                <a href="https://github.com/Ceejaybill" title="GitHub" aria-label="GitHub">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 2 4 5 4 10c0 3 2 5 4 6v3h8v-3c2-1 4-3 4-6 0-5-4-8-8-8z" stroke="#3F2F25" stroke-width="1.2"/></svg>
+                </a>
+                <a href="https://twitter.com/JayBillEth" title="Twitter" aria-label="Twitter">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M23 3s-2 3-6 3c-3 0-6-1-9 2s-3 7-3 7v1" stroke="#3F2F25" stroke-width="1.4"/></svg>
+                </a>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer role="contentinfo">
+      <div class="container" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="logo-mark" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#D4B069"></rect><path d="M6 16L18 8" stroke="#3F2F25" stroke-width="1.6"/></svg>
+          </div>
+          <div style="font-size:13px">Ceejay Nwachukwu</div>
+        </div>
+        <div class="muted-small">© <span id="year"></span> Ceejay & Team</div>
+        <div><a href="#home" class="muted-small">Back to top</a></div>
+      </div>
+    </footer>
+
+  </main>
+
+
+    <script src="script.js" ></script>
+
+
+</body>
+</html>
