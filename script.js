@@ -109,12 +109,12 @@
     },
     uikit: {
       title: 'UIKit Pro',
-      year:'2023', role:'Frontend lead', stack:'React • TypeScript',
-      live:'#', git:'#', img:'assets/project-uikit.jpg'
+      year:'2023', role:'Frontend lead', stack:'Next.js • TypeScript • TailwindCss',
+      live:'http://localhost:3001', git:'https://github.com/Ceejaybill/uikit-pro', img:'images/uikit-pro.jpeg'
     },
     checkout: {
-      title:'Checkout API', year:'2022', role:'Backend', stack:'Node • Redis',
-      live:'#', git:'#', img:'assets/project-checkout.jpg'
+      title:'Checkout API', year:'2022', role:'Backend', stack:'Node.js • Redis',
+      live:'#', git:'#', img:'images/project-checkout.jpg'
     }
   };
 
